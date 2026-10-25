@@ -15,6 +15,25 @@ Türkçe için PII tespiti yapan mevcut araçların çoğu yalnızca sentetik ve
 
 Ve ayırt edici taahhüt: **her model, gerçek Türkçe metninden oluşturulmuş insan doğrulamalı altın test setiyle raporlanacak** — sentetik skorlar değil.
 
+### Karşılaştırma
+
+Aynı değerlendirme betiği, WikiANN-tr test bölümünün tamamı (10.000 cümle) üzerinde; etiket düzeyinde seqeval precision/recall/F1:
+
+| Model | Precision | Recall | F1 |
+|---|---|---|---|
+| **emi08/maske-berturk-baseline** | 0.923 | 0.934 | **0.929** |
+| savasy/bert-base-turkish-ner-cased | 0.919 | 0.930 | 0.925 |
+| Werea-co/Werea-TR-NER | 0.907 | 0.917 | 0.912 |
+| akdeniz27/bert-base-turkish-cased-ner | 0.699 | 0.649 | 0.673 |
+
+Notlar:
+
+- Dört model de aynı betik ve aynı test bölümüyle ölçülmüştür; farklı veri kümeleri üzerinde yapılan değerlendirmelerle karşılaştırılamaz.
+- savasy ile arasındaki fark (0.004 F1) eğitim rastgeleliği sınırındadır; kesin bir üstünlük iddiası değildir.
+- Werea ile arasındaki fark (0.017 F1) bu sınırın üzerindedir ve Werea'nın kendi kartında bildirdiği 0.917 F1 ile uyumludur. Başlıca fark taban modeldir: Werea 32 binlik vocab'lı dbmdz/bert-base-turkish-cased tabanını, maske ise 128 binlik vocab'lı dbmdz/bert-base-turkish-128k-cased tabanını kullanır.
+- akdeniz27/bert-base-turkish-cased-ner WikiANN ile değil Küçük (2016) Türkçe NER veri kümesiyle eğitildiğinden, WikiANN-tr üzerindeki düşük skoru model kalitesinden çok eğitim/test verisi uyuşmazlığını yansıtır.
+- WikiANN otomatik etiketli, haber tarzı bir veri kümesi olduğundan bu skorlar gerçek metinlerde üst sınırdır; gerçek metin performansı aşama 2'deki altın test setiyle ölçülecektir.
+
 ## Durum
 
 | Aşama | Çıktı | Durum |
@@ -49,24 +68,6 @@ maske/
 ├── data/                          # aşama 2: altın test seti buraya gelecek
 └── maske/                         # aşama 3-4: kural katmanı ve paket kodu
 ~~~
-### Karşılaştırma
-
-Aynı değerlendirme betiği, WikiANN-tr test bölümünün tamamı (10.000 cümle) üzerinde; etiket düzeyinde seqeval precision/recall/F1:
-
-| Model | Precision | Recall | F1 |
-|---|---|---|---|
-| **emi08/maske-berturk-baseline** | 0.923 | 0.934 | **0.929** |
-| savasy/bert-base-turkish-ner-cased | 0.919 | 0.930 | 0.925 |
-| Werea-co/Werea-TR-NER | 0.907 | 0.917 | 0.912 |
-| akdeniz27/bert-base-turkish-cased-ner | 0.699 | 0.649 | 0.673 |
-
-Notlar:
-
-- Dört model de aynı betik ve aynı test bölümüyle ölçülmüştür; farklı veri kümeleri üzerinde yapılan değerlendirmelerle karşılaştırılamaz.
-- savasy ile arasındaki fark (0.004 F1) eğitim rastgeleliği sınırındadır; kesin bir üstünlük iddiası değildir.
-- Werea ile arasındaki fark (0.017 F1) bu sınırın üzerindedir ve Werea'nın kendi kartında bildirdiği 0.917 F1 ile uyumludur. Başlıca fark taban modeldir: Werea 32 binlik vocab'lı dbmdz/bert-base-turkish-cased tabanını, maske ise 128 binlik vocab'lı dbmdz/bert-base-turkish-128k-cased tabanını kullanır.
-- akdeniz27/bert-base-turkish-cased-ner WikiANN ile değil Küçük (2016) Türkçe NER veri kümesiyle eğitildiğinden, WikiANN-tr üzerindeki düşük skoru model kalitesinden çok eğitim/test verisi uyuşmazlığını yansıtır.
-- WikiANN otomatik etiketli, haber tarzı bir veri kümesi olduğundan bu skorlar gerçek metinlerde üst sınırdır; gerçek metin performansı aşama 2'deki altın test setiyle ölçülecektir.
 
 ## Katkı
 
