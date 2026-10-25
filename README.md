@@ -1,10 +1,10 @@
-[Türkçe · English](README.en.md)
+Türkçe · [English](README.en.md)
 
 # maske 🔒
 
 Türkçe metinlerde kişisel veri (PII) tespiti — açık kaynak, KVKK odaklı, iki katmanlı.
 
-![Lisans](https://img.shields.io/badge/license-MIT-green) ![Model](https://img.shields.io/badge/model-maske--berturk--baseline-blue)
+[![Lisans: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE) [![Model: maske-berturk-baseline](https://img.shields.io/badge/model-maske--berturk--baseline-blue)](https://huggingface.co/emi08/maske-berturk-baseline)
 
 ## Neden var?
 
@@ -46,10 +46,6 @@ maske/
 ├── README.md                      # buradasınız (Türkçe)
 ├── README.en.md                   # English
 ├── LICENSE                        # MIT
-├── .github/
-│   └── FUNDING.yml                # "Sponsor this project" butonu
-├── notebooks/
-│   └── maske-01-baseline.ipynb    # aşama 1 eğitim defteri (Colab/Kaggle)
 ├── data/                          # aşama 2: altın test seti buraya gelecek
 └── maske/                         # aşama 3-4: kural katmanı ve paket kodu
 ~~~
