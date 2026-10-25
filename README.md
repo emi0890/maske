@@ -58,15 +58,6 @@ maske/
 
 Hatalı tespit örnekleri bulursanız issue açın. Tek kuralımız: **gerçek kişisel veri asla bu depoya commit edilmez** — örneklerde uydurma isim/numara kullanın.
 
-## Destek
-
-maske'yi faydalı bulduysanız iki yoldan destek olabilirsiniz:
-
-- **GitHub Sponsors**: [github.com/sponsors/GITHUB_KULLANICI_ADI](https://github.com/sponsors/GITHUB_KULLANICI_ADI) — uluslararası kartlarla, komisyonsuz
-- **Papara**: Papara No `PAPARA_NO` — Türkiye içi, ücretsiz
-
-Para dışındaki en iyi destek: yıldız verin, issue açın, arkadaşınıza bahsedin.
-
 ## Lisans
 
 [MIT](LICENSE)
