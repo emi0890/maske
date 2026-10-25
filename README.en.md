@@ -15,24 +15,23 @@ Existing Turkish PII tools are mostly evaluated on synthetic data only, and none
 
 And the distinguishing commitment: **every model will be reported on a human-verified golden test set built from real Turkish text** — not synthetic scores.
 
-### Comparison
+## Results
 
-All four models measured with the same evaluation script on the full WikiANN-tr test split (10,000 sentences) — entity-level seqeval precision/recall/F1:
+The phase 1 baseline (`emi08/maske-berturk-baseline`) compared against four Turkish NER models with the same evaluation script on the full WikiANN-tr test split (10,000 sentences):
 
 | Model | Precision | Recall | F1 |
 |---|---|---|---|
-| **emi08/maske-berturk-baseline** | 0.923 | 0.934 | **0.929** |
+| **maske (this project)** | 0.923 | 0.934 | **0.929** |
 | savasy/bert-base-turkish-ner-cased | 0.919 | 0.930 | 0.925 |
 | Werea-co/Werea-TR-NER | 0.907 | 0.917 | 0.912 |
 | akdeniz27/bert-base-turkish-cased-ner | 0.699 | 0.649 | 0.673 |
 
-Notes:
+- All four models were measured on the same test split with the same script; results are not comparable with scores from other datasets.
+- The gap to savasy (0.004 F1) is within training-randomness noise; the gap to Werea (0.017 F1) matches the 0.917 F1 reported on Werea's own card. The main difference is the base model (32k vs 128k vocabulary).
+- akdeniz27 was trained on the Küçük (2016) dataset, not WikiANN; its low score reflects a train/test data mismatch rather than model quality.
+- WikiANN is auto-labeled and news-style, so these scores are a ceiling for real-world text. Real performance will be measured with the phase 2 gold test set.
 
-- All four models were measured with the same script on the same test split; results are not comparable with evaluations on other datasets.
-- The gap to savasy (0.004 F1) is within training-randomness noise; not a claim of superiority.
-- The gap to Werea (0.017 F1) is above that noise level and is consistent with the 0.917 F1 reported on Werea's own model card. The main difference is the base model: Werea fine-tunes the 32k-vocabulary dbmdz/bert-base-turkish-cased, while maske fine-tunes the 128k-vocabulary dbmdz/bert-base-turkish-128k-cased.
-- akdeniz27/bert-base-turkish-cased-ner was trained on the Küçük (2016) Turkish NER dataset rather than WikiANN, so its low score on WikiANN-tr reflects a train/test data mismatch more than model quality.
-- WikiANN is auto-labeled and news-style, so these scores are a ceiling for real-world text; real-text performance will be measured with the gold test set in phase 2.
+Last measured: October 2026 · Full method: [model card](https://huggingface.co/emi08/maske-berturk-baseline)
 
 ## Status
 
