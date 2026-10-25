@@ -15,25 +15,26 @@ Türkçe için PII tespiti yapan mevcut araçların çoğu yalnızca sentetik ve
 
 Ve ayırt edici taahhüt: **her model, gerçek Türkçe metninden oluşturulmuş insan doğrulamalı altın test setiyle raporlanacak** — sentetik skorlar değil.
 
-## Değerlendirme
+## Sonuçlar
 
-WikiANN-tr test split'inin tamamı üzerinde (10.000 cümle) seqeval varlık düzeyi F1.
-Tüm satırlar birebir aynı ince ayar tarifini kullanır (lr 2e-5, 3 epoch, batch 16,
-max_length 128, aynı tohum) — satırlar arasında yalnızca taban checkpoint değişir.
+maske modelleri ile üç Türkçe NER modeli, aynı değerlendirme betiği ile
+WikiANN-tr test split'inin tamamında (10.000 cümle) ölçüldü:
 
-| Model | Taban | Param | Precision | Recall | F1 |
-|---|---|---|---|---|---|
-| [maske-berturk-baseline](https://huggingface.co/emi08/maske-berturk-baseline) | dbmdz/bert-base-turkish-128k-cased | 110M | 0.923 | 0.934 | **0.929** |
-| [maske-modernbert-tr-bakeoff](https://huggingface.co/emi08/maske-modernbert-tr-bakeoff) | ytu-ce-cosmos/modernbert-tr-base-1k | 150M | 0.923 | 0.935 | **0.929** |
+| Model | Precision | Recall | F1 |
+|---|---|---|---|
+| **maske-modernbert-tr-bakeoff** — [kart](https://huggingface.co/emi08/maske-modernbert-tr-bakeoff) | 0.923 | 0.935 | **0.929** |
+| **maske-berturk-baseline** — [kart](https://huggingface.co/emi08/maske-berturk-baseline) | 0.923 | 0.934 | **0.929** |
+| savasy/bert-base-turkish-ner-cased | 0.919 | 0.930 | 0.925 |
+| Werea-co/Werea-TR-NER | 0.907 | 0.917 | 0.912 |
+| akdeniz27/bert-base-turkish-cased-ner | 0.699 | 0.649 | 0.673 |
 
-**Bulgu:** 2020 tarihli bir BERT ile 144 milyar Türkçe token üzerinde sıfırdan
-eğitilmiş 2026 tarihli bir ModernBERT, aynı tarif altında tamamen aynı varlık
-düzeyi F1'e ulaşıyor; aynı ModernBERT tabanının farklı bir Türkçe NER veri
-kümesindeki ([Küçük & Küçük 2016](https://huggingface.co/akdeniz27/modernbert-tr-base-ner))
-üçüncü taraf ince ayarı da aynı tabloyu gösteriyor. WikiANN-tr taban ölçekte
-doygun görünüyor; maske'nin kalite yol haritası bu yüzden genel liderlik tablosu
-farkları yerine KVKK-PII dikeyini hedefliyor (alan altın seti + sağlama toplamı
-kural katmanı).
+- Beş model de aynı test split'i ve aynı betikle ölçüldü; bu sonuçlar başka veri kümelerinden gelen skorlarla karşılaştırılamaz.
+- İki maske satırı birebir aynı ince ayar tarifini kullanır ve yalnızca tabanda farklıdır: 2020 tarihli BERTurk (128k) ile 2026 tarihli ModernBERT-TR (150M, 144 milyar Türkçe token). İkisi 0.929'da berabere — WikiANN-tr taban ölçekte doygun; aynı tabanın üçüncü taraf ince ayarı ([akdeniz27, Küçük 2016](https://huggingface.co/akdeniz27/modernbert-tr-base-ner)) da bunu doğruluyor. Gelecekteki eğitim bu yüzden yeni tabanlara değil, alan verisine yönelecek.
+- savasy ile fark (0.004 F1) eğitim rastgeleliği gürültüsü içinde; Werea ile fark (0.017 F1) Werea'nın kendi kartında bildirdiği 0.917 ile uyumlu. Temel fark taban modelde (32k ve 128k kelime dağarcığı).
+- akdeniz27, WikiANN değil Küçük (2016) veri kümesiyle eğitildi; düşük skoru model kalitesinden değil, eğitim/test verisi uyuşmazlığından kaynaklanır.
+- WikiANN otomatik etiketli ve haber tarzıdır; bu skorlar gerçek dünya metni için tavan değerdir. Gerçek performans 2. aşama altın test seti ile ölçülecek.
+
+Son ölçüm: Ekim 2026 · Yöntem: [baseline kartı](https://huggingface.co/emi08/maske-berturk-baseline) · [bake-off kartı](https://huggingface.co/emi08/maske-modernbert-tr-bakeoff)
 
 ## Durum
 
