@@ -4,7 +4,7 @@
 
 Turkish PII (personally identifiable data) detection — open source, KVKK-focused, two-layer.
 
-![License](https://img.shields.io/badge/license-MIT-green) ![Model](https://img.shields.io/badge/model-maske--berturk--baseline-blue)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE) [![Model: maske-berturk-baseline](https://img.shields.io/badge/model-maske--berturk--baseline-blue)](https://huggingface.co/emi08/maske-berturk-baseline)
 
 ## Why maske?
 
@@ -46,10 +46,6 @@ maske/
 ├── README.md                      # Türkçe
 ├── README.en.md                   # you are here
 ├── LICENSE                        # MIT
-├── .github/
-│   └── FUNDING.yml                # "Sponsor this project" button
-├── notebooks/
-│   └── maske-01-baseline.ipynb    # stage-1 training notebook (Colab/Kaggle)
 ├── data/                          # stage 2: golden test set will live here
 └── maske/                         # stages 3-4: rule layer and package code
 ~~~
