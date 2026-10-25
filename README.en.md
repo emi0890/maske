@@ -50,6 +50,25 @@ maske/
 └── maske/                         # stages 3-4: rule layer and package code
 ~~~
 
+### Comparison
+
+All four models measured with the same evaluation script on the full WikiANN-tr test split (10,000 sentences) — entity-level seqeval precision/recall/F1:
+
+| Model | Precision | Recall | F1 |
+|---|---|---|---|
+| **emi08/maske-berturk-baseline** | 0.923 | 0.934 | **0.929** |
+| savasy/bert-base-turkish-ner-cased | 0.919 | 0.930 | 0.925 |
+| Werea-co/Werea-TR-NER | 0.907 | 0.917 | 0.912 |
+| akdeniz27/bert-base-turkish-cased-ner | 0.699 | 0.649 | 0.673 |
+
+Notes:
+
+- All four models were measured with the same script on the same test split; results are not comparable with evaluations on other datasets.
+- The gap to savasy (0.004 F1) is within training-randomness noise; not a claim of superiority.
+- The gap to Werea (0.017 F1) is above that noise level and is consistent with the 0.917 F1 reported on Werea's own model card. The main difference is the base model: Werea fine-tunes the 32k-vocabulary dbmdz/bert-base-turkish-cased, while maske fine-tunes the 128k-vocabulary dbmdz/bert-base-turkish-128k-cased.
+- akdeniz27/bert-base-turkish-cased-ner was trained on the Küçük (2016) Turkish NER dataset rather than WikiANN, so its low score on WikiANN-tr reflects a train/test data mismatch more than model quality.
+- WikiANN is auto-labeled and news-style, so these scores are a ceiling for real-world text; real-text performance will be measured with the gold test set in phase 2.
+
 ## Contributing
 
 Found a wrong detection? Open an issue. One hard rule: **real personal data is never committed to this repo** — use made-up names/numbers in examples.
