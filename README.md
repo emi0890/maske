@@ -1,16 +1,3 @@
----
-license: apache-2.0
-language:
-- tr
-- en
-tags:
-- ner
-- token-classification
-- kvkk
-- pii
-- turkish
----
-
 # maske 🇹🇷 — Türkçe KVKK PII Maskeleme NER
 
 [🇬🇧 English](README_EN.md) · [🇹🇷 Türkçe](README.md)
