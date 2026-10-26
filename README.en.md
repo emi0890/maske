@@ -1,87 +1,152 @@
-[Türkçe](README.md) · English
+---
+license: apache-2.0
+language:
+- tr
+- en
+tags:
+- ner
+- token-classification
+- kvkk
+- pii
+- turkish
+---
 
-# maske 🔒
+# maske 🇹🇷 — Turkish KVKK PII-Masking NER
 
-Turkish PII (personally identifiable data) detection — open source, KVKK-focused, two-layer.
+[🇬🇧 English](README_EN.md) · [🇹🇷 Türkçe](README.md)
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE) [![Model: maske-berturk-baseline](https://img.shields.io/badge/model-maske--berturk--baseline-blue)](https://huggingface.co/emi08/maske-berturk-baseline)
+[![Hugging Face · maske](https://img.shields.io/badge/%F0%9F%A4%97%20maske-emi08%2Fmaske-yellow)](https://huggingface.co/emi08/maske)
+[![Hugging Face · bakeoff](https://img.shields.io/badge/%F0%9F%A4%97%20bakeoff-emi08%2Fmaske--modernbert--tr--bakeoff-yellow)](https://huggingface.co/emi08/maske-modernbert-tr-bakeoff)
+[![Hugging Face · baseline](https://img.shields.io/badge/%F0%9F%A4%97%20baseline-emi08%2Fmaske--berturk--baseline-yellow)](https://huggingface.co/emi08/maske-berturk-baseline)
 
-## Why maske?
+## Overview
 
-Existing Turkish PII tools are mostly evaluated on synthetic data only, and none offers a deterministic, zero-false-positive rule layer. When you work with data covered by KVKK (Turkey's GDPR equivalent), "it probably catches it" isn't good enough. maske's answer is two layers:
+`maske` is a family of token-classification (NER) models built to detect and automatically mask personal data in Turkish text under **Law No. 6698 on the Protection of Personal Data (KVKK, the Turkish GDPR)**. The family consists of the flagship model `emi08/maske`, trained entirely on synthetic data, plus two reference models trained to measure the architecture choice: `emi08/maske-modernbert-tr-bakeoff` and `emi08/maske-berturk-baseline`. All training data is synthetically generated, so no real personal data is ever used during training. The models tag nine entity types with the BIO scheme and are evaluated with a strict span-exact criterion.
 
-1. **Rule layer** — TCKN (national ID), IBAN, phone, license plate, email. Checksum and format validation: no model involved in these fields, no hallucinations, zero-false-positive target.
-2. **NER layer** — a fine-tuned BERTurk for the flexible parts rules can't catch: suffixed names (Ayşe'ye, Ahmet'ten) and addresses.
+## Models
 
-And the distinguishing commitment: **every model will be reported on a human-verified golden test set built from real Turkish text** — not synthetic scores.
-
-## Results
-
-The maske models compared against three Turkish NER models with the same
-evaluation script on the full WikiANN-tr test split (10,000 sentences):
-
-| Model | Precision | Recall | F1 |
-|---|---|---|---|
-| **maske-modernbert-tr-bakeoff** — [card](https://huggingface.co/emi08/maske-modernbert-tr-bakeoff) | 0.923 | 0.935 | **0.929** |
-| **maske-berturk-baseline** — [card](https://huggingface.co/emi08/maske-berturk-baseline) | 0.923 | 0.934 | **0.929** |
-| savasy/bert-base-turkish-ner-cased | 0.919 | 0.930 | 0.925 |
-| Werea-co/Werea-TR-NER | 0.907 | 0.917 | 0.912 |
-| akdeniz27/bert-base-turkish-cased-ner | 0.699 | 0.649 | 0.673 |
-
-- All five models were measured on the same test split with the same script; results are not comparable with scores from other datasets.
-- The two maske rows use an identical fine-tuning recipe and differ only in the base: a 2020 BERTurk (128k vocab) vs a 2026 ModernBERT-TR (150M, 144B Turkish tokens). They tie at 0.929 — WikiANN-tr is saturated at base scale, also indicated by a third-party fine-tune of the same base ([akdeniz27 on Küçük 2016](https://huggingface.co/akdeniz27/modernbert-tr-base-ner)). Future training therefore moves to domain data, not new bases.
-- The gap to savasy (0.004 F1) is within training-randomness noise; the gap to Werea (0.017 F1) matches the 0.917 F1 reported on Werea's own card. The main difference is the base model (32k vs 128k vocabulary).
-- akdeniz27 was trained on the Küçük (2016) dataset, not WikiANN; its low score reflects a train/test data mismatch rather than model quality.
-- WikiANN is auto-labeled and news-style, so these scores are a ceiling for real-world text. Real performance will be measured with the phase 2 gold test set.
-
-Last measured: October 2026 · Method: [baseline card](https://huggingface.co/emi08/maske-berturk-baseline) · [bake-off card](https://huggingface.co/emi08/maske-modernbert-tr-bakeoff)
-
-- All four models were measured on the same test split with the same script; results are not comparable with scores from other datasets.
-- The gap to savasy (0.004 F1) is within training-randomness noise; the gap to Werea (0.017 F1) matches the 0.917 F1 reported on Werea's own card. The main difference is the base model (32k vs 128k vocabulary).
-- akdeniz27 was trained on the Küçük (2016) dataset, not WikiANN; its low score reflects a train/test data mismatch rather than model quality.
-- WikiANN is auto-labeled and news-style, so these scores are a ceiling for real-world text. Real performance will be measured with the phase 2 gold test set.
-
-Last measured: October 2026 · Full method: [model card](https://huggingface.co/emi08/maske-berturk-baseline)
-
-## Status
-
-| Stage | Output | Status |
+| Model | Notes | WikiANN-tr F1 |
 |---|---|---|
-| 1 — Baseline NER | [emi08/maske-berturk-baseline](https://huggingface.co/emi08/maske-berturk-baseline) (PER/ORG/LOC) | ✅ |
-| 2 — Golden test set | human-verified evaluation set from real text | 🔜 |
-| 3 — Rule layer | TCKN/IBAN/phone validators | 🔜 |
-| 4 — maske package | `pip install maske` — unified detection + masking | 🔜 |
+| [emi08/maske](https://huggingface.co/emi08/maske) | Flagship — trained on synthetic KVKK data; a training update improving e-mail detection is in progress | **0.9317** |
+| [emi08/maske-modernbert-tr-bakeoff](https://huggingface.co/emi08/maske-modernbert-tr-bakeoff) | Architecture bake-off — modernbert-tr-base | 0.929 |
+| [emi08/maske-berturk-baseline](https://huggingface.co/emi08/maske-berturk-baseline) | Stage-1 reference — BERTurk base | 0.929 |
 
-## Quick start (stage 1)
+## Entity Types
+
+| Type | Description | Example |
+|---|---|---|
+| PER | Person name | Ayşe Yılmaz |
+| ORG | Organization / company | Kolaykargo A.Ş. |
+| LOC | City / country | Kadıköy, Ankara |
+| ADDR | Street address | Bağdat Cad. No:12 D:3, Kadıköy/İstanbul |
+| TC_NO | Turkish national ID (11 digits, with checksum) | 34628194872 |
+| IBAN | Turkish IBAN (mod-97 valid) | TR33 0006 1005 1978 6457 8413 26 |
+| PHONE | Phone number | 0532 123 45 67, +90 532 123 45 67 |
+| EMAIL | E-mail address | ad.soyad@firma.com.tr |
+| PLATE | Vehicle license plate | 34 ABC 123 |
+
+## Label Set (19)
+
+~~~text
+O
+B-PER   I-PER
+B-ORG   I-ORG
+B-LOC   I-LOC
+B-ADDR  I-ADDR
+B-TC_NO I-TC_NO
+B-IBAN  I-IBAN
+B-PHONE I-PHONE
+B-EMAIL I-EMAIL
+B-PLATE I-PLATE
+~~~
+
+## Quick Start
 
 ~~~python
 from transformers import pipeline
 
-ner = pipeline(
+pipe = pipeline(
     "token-classification",
-    model="emi08/maske-berturk-baseline",
+    model="emi08/maske",
     aggregation_strategy="simple",
 )
-print(ner("Ayşe'ye 500 TL gönderdim, makbuzu Ahmet Bey'in e-postasına yazdım."))
+
+text = (
+    "Sayın Ayşe Yılmaz, TC kimlik no 12345678901. "
+    "Ödemeyi TR33 0006 1005 1978 6457 8413 26 IBAN hesabına yapın. "
+    "Sorularınız için ayse.yilmaz@ornek.com.tr adresine yazın."
+)
+
+for entity in pipe(text):
+    print(f"{entity['entity_group']:8s} {entity['word']}  ({entity['start']}–{entity['end']})")
 ~~~
 
-⚠️ Experimental baseline — not production-ready. Details: [model card](https://huggingface.co/emi08/maske-berturk-baseline).
+To automatically mask text:
 
-## Repository layout (planned)
+~~~python
+def mask_text(text: str, pipe) -> str:
+    """Replaces detected PII entities with [THEIR TYPE]."""
+    entities = sorted(pipe(text), key=lambda e: e["start"], reverse=True)
+    for e in entities:
+        text = text[: e["start"]] + f"[{e['entity_group']}]" + text[e["end"] :]
+    return text
+
+print(mask_text("Ayşe Yılmaz adına fatura, 34 ABC 123 plakalı araca kesildi.", pipe))
+# [PER] adına fatura, [PLATE] plakalı araca kesildi.
+~~~
+
+## Evaluation
+
+All numbers are produced by the same span-exact evaluation harness: an entity only counts as correct if both its type and its exact character span match the gold annotation.
+
+### WikiANN-tr comparison
+
+| Model | P | R | F1 |
+|---|---|---|---|
+| emi08/maske | 0.9260 | 0.9374 | **0.9317** |
+| emi08/maske-berturk-baseline | 0.923 | 0.934 | 0.929 |
+| emi08/maske-modernbert-tr-bakeoff | 0.923 | 0.935 | 0.929 |
+| savasy/bert-base-turkish-ner-cased | 0.919 | 0.930 | 0.925 |
+| Werea-co/Werea-TR-NER | 0.907 | 0.917 | 0.912 |
+| akdeniz27/bert-base-turkish-cased-ner | 0.699 | 0.649 | 0.673 |
+
+### emi08/maske — per evaluation set
+
+| Set | P | R | F1 |
+|---|---|---|---|
+| Synthetic test | — | — | 1.0000 |
+| WikiANN-tr | 0.9260 | 0.9374 | 0.9317 |
+| Werea-KVKK-Bench (240 rows) | 0.1789 | 0.4875 | 0.2617 |
+| Real text (29 docs) | 0.6809 | 0.9143 | 0.7805 |
+
+### Real-text evaluation set
+
+The hand-curated set contains **29 documents / 35 gold entities**; 8 of the documents are trap documents (TC ID numbers with a broken checksum digit, invalid IBANs, 11-digit order numbers, card numbers, VKNs, URLs, etc.). Trap values are not part of the gold set and count as false positives if the model reports them; the current release produced 7 FPs on these documents. Per-type gold distribution:
 
 ~~~text
-maske/
-├── README.md                      # Türkçe
-├── README.en.md                   # you are here
-├── LICENSE                        # MIT
-├── data/                          # stage 2: golden test set will live here
-└── maske/                         # stages 3-4: rule layer and package code
+PER 7 · ORG 5 · LOC 5 · TC_NO 5 · PHONE 4 · ADDR 3 · IBAN 2 · EMAIL 2 · PLATE 2 — total 35
 ~~~
 
-## Contributing
+**Known issue (being fixed in the current retrain):** e-mail addresses are occasionally caught as fragments on real text (EMAIL F1 = 0.0). The rescue post-processing documented on the model card — dropping EMAIL predictions without '@' and normalizing predictions that overlap a valid e-mail regex to the full address span — addresses this in production.
 
-Found a wrong detection? Open an issue. One hard rule: **real personal data is never committed to this repo** — use made-up names/numbers in examples.
+## Status & Roadmap
+
+- [x] Flagship `emi08/maske` + baseline / bake-off comparison and external-model benchmarks
+- [ ] **Training update (in progress):** e-mail booster data (full-span positives + hard negatives for observed FPs) and the rescue post-processing layer
+- [ ] To be added once the update finishes: real-text overall F1, real-text EMAIL F1, Werea-KVKK-Bench F1, and the per-type real-text table
+- [ ] Final refresh of the model cards
 
 ## License
 
-[MIT](LICENSE)
+This project is released under the **Apache 2.0** license.
+
+## Citation
+
+~~~bibtex
+@misc{maske_2026,
+  author       = {emi08},
+  title        = {maske: Turkish Personal Data (PII) Detection for KVKK Workflows},
+  year         = {2026},
+  url          = {https://huggingface.co/emi08/maske}
+}
+~~~
