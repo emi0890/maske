@@ -1,6 +1,6 @@
 # maske 🇹🇷 — Türkçe KVKK PII Maskeleme NER
 
-[🇬🇧 English](README_en.md) · [🇹🇷 Türkçe](README.md)
+[🇬🇧 English](READM.en.md) · [🇹🇷 Türkçe](README.md)
 
 [![Hugging Face · maske](https://img.shields.io/badge/%F0%9F%A4%97%20maske-emi08%2Fmaske-yellow)](https://huggingface.co/emi08/maske)
 [![Hugging Face · bakeoff](https://img.shields.io/badge/%F0%9F%A4%97%20bakeoff-emi08%2Fmaske--modernbert--tr--bakeoff-yellow)](https://huggingface.co/emi08/maske-modernbert-tr-bakeoff)
